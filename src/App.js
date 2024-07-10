@@ -78,30 +78,30 @@ const App = () => {
   }, [messages]);
 
   return (
-    <div className="fabs">
-      <div className={`chat ${isChatVisible ? "is-visible" : ""}`}>
-        <div className="chat_header">
-          <div className="chat_option">
-            <div className="header_img">
-              <div className="relative w-10 h-10">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-200 flex-shrink-0">
+    <div className="chat_bot_main__mx__fabs">
+      <div className={`chat_bot_main__mx ${isChatVisible ? "chat_bot_main__mx__is-visible" : ""}`}>
+        <div className="chat_bot_main__mx_header">
+          <div className="chat_bot_main__mx_option">
+            <div className="">
+              <div className="chat_bot_main__mx_header_img">
+                <div className="">
                   <img
                     src="https://w7.pngwing.com/pngs/198/625/png-transparent-call-centre-customer-service-computer-icons-call-centre-miscellaneous-face-telephone-call-thumbnail.png"
                     alt="Agent"
                   />
                 </div>
-                <span className="online-indicator"></span>
+                <chatbot_span className="online-indicator"></chatbot_span>
               </div>
             </div>
-            <span id="chat_head">Jane Doe</span>
+            <chatbot_span id="chat_bot_main__mx_head">Jane Doe</chatbot_span>
             {!typing && (
               <>
                 {" "}
                 <br />{" "}
-                <span className="agent type_loader_container">
+                <chatbot_span className="agent type_loader_container">
                   Assistant
-                </span>{" "}
-                <span className="online"></span>
+                </chatbot_span>{" "}
+                <chatbot_span className="online"></chatbot_span>
               </>
             )}
             {typing && (
@@ -109,22 +109,22 @@ const App = () => {
                 <div class="typing_loader"></div>
               </div>
             )}
-            <span
-              id="chat_fullscreen_loader"
-              className="chat_fullscreen_loader"
+            <chatbot_span
+              id="chat_bot_main__mx_fullscreen_loader"
+              className="chat_bot_main__mx_fullscreen_loader"
               onClick={toggleFullscreen}
             >
               <i
                 className={`fullscreen zmdi ${isFullscreen ? "zmdi-window-restore" : "zmdi-window-maximize"}`}
               ></i>
-            </span>
+            </chatbot_span>
           </div>
         </div>
 
         <div
-          id="chat_fullscreen"
+          id="chat_bot_main__mx_fullscreen"
           ref={chatboxRef}
-          className={`chat_conversion chat_converse ${isFullscreen ? "chat_fullscreen" : ""}`}
+          className={`chat_bot_main__mx_conversion chat_bot_main__mx_converse ${isFullscreen ? "chat_bot_main__mx_fullscreen" : ""}`}
         >
           {viewInitialPrompt && (
             <>
@@ -132,12 +132,12 @@ const App = () => {
             </>
           )}
           {messages.map((msg, index) => (
-            <span
+            <chatbot_span
               key={index}
-              className={`chat_msg_item ${msg.sender === "Bot" ? "chat_msg_item_admin" : "chat_msg_item_user"}`}
+              className={`chat_bot_main__mx_msg_item ${msg.sender === "Bot" ? "chat_bot_main__mx_msg_item_admin" : "chat_bot_main__mx_msg_item_user"}`}
             >
               {msg.sender === "Bot" && (
-                <div className="chat_avatar">
+                <div className="chat_bot_main__mx_avatar">
                   <img
                     src="https://w7.pngwing.com/pngs/198/625/png-transparent-call-centre-customer-service-computer-icons-call-centre-miscellaneous-face-telephone-call-thumbnail.png"
                     alt="Agent"
@@ -145,19 +145,19 @@ const App = () => {
                 </div>
               )}
               {msg.message}
-            </span>
+            </chatbot_span>
           ))}
         </div>
 
         <div className="fab_field">
-          <a id="fab_send" className="send_btn" onClick={() => sendMessage(input)}>
+          <a id="fab_send" className="chat_bot_main__mx__send_btn" onClick={() => sendMessage(input)}>
             <i className=""><LuSendHorizonal /></i>
           </a>
           <textarea
-            id="chatSend"
-            name="chat_message"
+            id="chat_bot_main__mxSend"
+            name="chat_bot_main__mx_message"
             placeholder="Send a message"
-            className="chat_field chat_message"
+            className="chat_bot_main__mx_field chat_bot_main__mx_message chat_bot_main__mx_field_input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleSend}
@@ -166,7 +166,7 @@ const App = () => {
       </div>
       <a
         id="prime"
-        className={`fab ${isChatVisible ? "is-visible  animate-view-spin" : ""}`}
+        className={`fab ${isChatVisible ? "chat_bot_main__mx__is-visible  animate-view-spin" : ""}`}
         onClick={toggleFab}
       >
         <i
