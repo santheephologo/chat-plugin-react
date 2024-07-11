@@ -1,60 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { io } from "socket.io-client";
 import "./App.css";
-
 import { LuSendHorizonal } from "react-icons/lu";
-
-
-const App = ({configScript}) => {
-  const [config, setConfig] = useState(null);
-  const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    console.log("config : "+configScript)
-    if (configScript) {
-      
-      setConfig(configScript);
-    } else {
-      console.log("configuration failed")
-    }
-  }, []);
-
-  useEffect(() => {
-    if (config) {
-      const socketInstance = io(config.SOCKET_URL);
-      setSocket(socketInstance);
-
-      socketInstance.on('connect', () => {
-        console.log("Socket.IO connection established");
-      });
-
-      socketInstance.on('disconnect', () => {
-        console.log("Socket.IO connection closed");
-      });
-
-      socketInstance.on('connect_error', (error) => {
-        console.error("Socket.IO connection error:", error);
-      });
-
-      
-    }
-  }, [config]);
-
-  if (!config) {
-    console.log("Loading configuration...");
-    return <div>Loading configuration...</div>;
-  }
-
-  if (config && socket) {
-    
-    return <ChatWidget socket={socket} client_id={config.CLIENT_ID} assitant_name={ config.ASSISTANT_NAME} />;
-  }
-
-  return null;
-};
-
-
-const ChatWidget = ({ socket, client_id, assitant_name }) => {
+import { io } from "socket.io-client";
+const socket = io("ws://localhost:5000");
+const ChatWidget = () => {
   
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -69,12 +18,25 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
       setViewInitialPrompt(false);
     }
   }, [typing, viewInitialPrompt]);
- 
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Socket.IO connection established");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket.IO connection closed");
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("Socket.IO connection error:", error);
+    });
+  }, []);
 
   useEffect(() => {
     socket.on("response", (msg) => {
       setTyping(false);
-      
+      console.log("received from server " + msg);
       addMessage("Bot", msg);
     });
 
@@ -84,14 +46,14 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
   }, []);
 
   const addMessage = (sender, message) => {
-    
+    console.log("response " + message);
     setMessages((prevMessages) => [...prevMessages, { sender, message }]);
   };
 
   const sendMessage = (message) => {
     setTyping(true);
     addMessage("User", message);
-    socket.emit("message", { client_id: client_id, message });
+    socket.emit("message", { client_id: "66836f2ef640cff3cdaa0d50", message });
   };
 
   const handleSend = (e) => {
@@ -132,7 +94,7 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
                 <chatbot_span className="online-indicator"></chatbot_span>
               </div>
             </div>
-            <chatbot_span id="chat_bot_main__mx_head">{assitant_name && assitant_name }</chatbot_span>
+            <chatbot_span id="chat_bot_main__mx_head">Akon</chatbot_span>
             {!typing && (
               <>
                 {" "}
@@ -216,4 +178,4 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
   );
 };
 
-export default App;
+export default ChatWidget;

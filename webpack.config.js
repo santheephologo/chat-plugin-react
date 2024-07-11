@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'), // Output directory
     filename: 'bundle.js', // Output filename
-    library: 'MyReactWidget', // Name your library for external usage
+    library: 'ReactChatbotWidget', // Name your library for external usage
     libraryTarget: 'umd', // Universal Module Definition
     umdNamedDefine: true,
     libraryExport: 'default', // Export the default export
