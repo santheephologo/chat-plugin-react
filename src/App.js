@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
-import "./App.css";
-
+import "./Chatbot_App.css";
+import { TbMessageDots } from "react-icons/tb";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { LuSendHorizonal } from "react-icons/lu";
 
 
@@ -208,9 +209,14 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
         className={`fab ${isChatVisible ? "chat_bot_main__mx__is-visible  animate-view-spin" : ""}`}
         onClick={toggleFab}
       >
-        <i
-          className={`prime zmdi ${isChatVisible ? " zmdi-close" : "zmdi-comment-outline"}`}
-        ></i>
+              <div className="chatbot_icon_mx_inner">
+                  {
+                      isChatVisible && (<div className="chatbot_icon_mx"><AiOutlineCloseCircle /></div>)
+                  }
+                  {
+                       !isChatVisible && (<div className="chatbot_icon_mx"><TbMessageDots /></div>)
+                  }
+             </div>
       </a>
     </div>
   );

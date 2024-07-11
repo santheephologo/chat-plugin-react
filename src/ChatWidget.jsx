@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import "./App.css";
+import "./Chatbot_App.css";
 import { LuSendHorizonal } from "react-icons/lu";
+import { TbMessageDots } from "react-icons/tb";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { io } from "socket.io-client";
 const socket = io("ws://localhost:5000");
 const ChatWidget = () => {
@@ -169,10 +171,16 @@ const ChatWidget = () => {
         id="prime"
         className={`fab ${isChatVisible ? "chat_bot_main__mx__is-visible  animate-view-spin" : ""}`}
         onClick={toggleFab}
-      >
-        <i
-          className={`prime zmdi ${isChatVisible ? " zmdi-close" : "zmdi-comment-outline"}`}
-        ></i>
+          >
+              <div className="chatbot_icon_mx_inner">
+                  {
+                      isChatVisible && (<div className="chatbot_icon_mx"><AiOutlineCloseCircle /></div>)
+                  }
+                  {
+                       !isChatVisible && (<div className="chatbot_icon_mx"><TbMessageDots /></div>)
+                  }
+             </div>
+                  
       </a>
     </div>
   );
