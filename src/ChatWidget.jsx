@@ -83,20 +83,22 @@ const ChatWidget = () => {
   return (
     <div className="chat_bot_main__mx__fabs">
       <div className={`chat_bot_main__mx ${isChatVisible ? "chat_bot_main__mx__is-visible" : ""}`}>
-        <div className="chat_bot_main__mx_header">
+        <div className="custom chat_bot_main__mx_header">
           <div className="chat_bot_main__mx_option">
-            <div className="">
-              <div className="chat_bot_main__mx_header_img">
-                <div >
+            <div className="chat_bot_main__mx_option_inner">
+              <div className="">
+                <div className="chat_bot_main__mx_header_img_container">
                   <img
+                    className="chat_bot_main__mx_header_img"
                     src="https://w7.pngwing.com/pngs/198/625/png-transparent-call-centre-customer-service-computer-icons-call-centre-miscellaneous-face-telephone-call-thumbnail.png"
                     alt="Agent"
                   />
+                  <chatbot_span className="online-indicator"></chatbot_span>
                 </div>
-                <chatbot_span className="online-indicator"></chatbot_span>
+                
               </div>
-            </div>
-            <chatbot_span id="chat_bot_main__mx_head">Akon</chatbot_span>
+              <div className="chat_bot_main__mx_name">
+                <chatbot_span id="chat_bot_main__mx_head">Akon</chatbot_span>
             {!typing && (
               <>
                 {" "}
@@ -112,6 +114,9 @@ const ChatWidget = () => {
                 <div class="typing_loader"></div>
               </div>
             )}
+              </div>
+            </div>
+            
             <chatbot_span
               id="chat_bot_main__mx_fullscreen_loader"
               className="chat_bot_main__mx_fullscreen_loader"
@@ -134,6 +139,27 @@ const ChatWidget = () => {
               <div className="initial_prompt">How may I assist you?</div>
             </>
           )}
+          <chatbot_span
+              
+              className={`chat_bot_main__mx_msg_item ${"chat_bot_main__mx_msg_item_admin" }`}
+            >
+              
+                <div className="chat_bot_main__mx_avatar">
+                  <img
+                    src="https://w7.pngwing.com/pngs/198/625/png-transparent-call-centre-customer-service-computer-icons-call-centre-miscellaneous-face-telephone-call-thumbnail.png"
+                    alt="Agent"
+                  />
+                </div>
+             
+              hi
+          </chatbot_span>
+          <chatbot_span
+              
+              className={`chat_bot_main__mx_msg_item ${"chat_bot_main__mx_msg_item_user" }`}
+            >
+
+              hi
+            </chatbot_span>
           {messages.map((msg, index) => (
             <chatbot_span
               key={index}
@@ -169,7 +195,7 @@ const ChatWidget = () => {
       </div>
       <a
         id="prime"
-        className={`fab ${isChatVisible ? "chat_bot_main__mx__is-visible  animate-view-spin" : ""}`}
+        className={`fab custom ${isChatVisible ? "chat_bot_main__mx__is-visible  animate-view-spin" : ""}`}
         onClick={toggleFab}
           >
               <div className="chatbot_icon_mx_inner">

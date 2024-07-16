@@ -9,17 +9,24 @@ import { LuSendHorizonal } from "react-icons/lu";
 const App = ({configScript}) => {
   const [config, setConfig] = useState(null);
   const [socket, setSocket] = useState(null);
+  const [customUI, setCustomUI] = useState({
+    backgroundColor: 'lightblue'
+  });
 
   useEffect(() => {
-    console.log("config : "+configScript)
+    // console.log("config : "+configScript)
     if (configScript) {
-      
       setConfig(configScript);
+      setCustomUI((prevConfig) => ({
+      ...prevConfig,
+      backgroundColor: configScript.CUSTOM_COLOR
+    }));
     } else {
       console.log("configuration failed")
     }
   }, []);
 
+  
   useEffect(() => {
     if (config) {
       const socketInstance = io(config.SOCKET_URL);
@@ -48,14 +55,14 @@ const App = ({configScript}) => {
 
   if (config && socket) {
     
-    return <ChatWidget socket={socket} client_id={config.CLIENT_ID} assitant_name={ config.ASSISTANT_NAME} />;
+    return <ChatWidget socket={socket} client_id={config.CLIENT_ID} assitant_name={ config.ASSISTANT_NAME} customUI={customUI} />;
   }
 
   return null;
 };
 
 
-const ChatWidget = ({ socket, client_id, assitant_name }) => {
+const ChatWidget = ({ socket, client_id, assitant_name, customUI }) => {
   
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -90,16 +97,19 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
   };
 
   const sendMessage = (message) => {
-    setTyping(true);
-    addMessage("User", message);
-    socket.emit("message", { client_id: client_id, message });
+    if (message.trim() !=="") { 
+      setInput("");
+      setTyping(true);
+      addMessage("User", message);
+      socket.emit("message", { client_id: client_id, message });
+    }
+
   };
 
   const handleSend = (e) => {
     if (e.which === 13 && !e.shiftKey) {
       e.preventDefault();
       sendMessage(input);
-      setInput("");
     }
   };
 
@@ -120,20 +130,22 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
   return (
     <div className="chat_bot_main__mx__fabs">
       <div className={`chat_bot_main__mx ${isChatVisible ? "chat_bot_main__mx__is-visible" : ""}`}>
-        <div className="chat_bot_main__mx_header">
+        <div style={customUI } className={`chat_bot_main__mx_header`}>
           <div className="chat_bot_main__mx_option">
-            <div className="">
-              <div className="chat_bot_main__mx_header_img">
-                <div >
+            <div className="chat_bot_main__mx_option_inner">
+              <div >
+                <div className="chat_bot_main__mx_header_img_container">
                   <img
+                    className="chat_bot_main__mx_header_img"
                     src="https://w7.pngwing.com/pngs/198/625/png-transparent-call-centre-customer-service-computer-icons-call-centre-miscellaneous-face-telephone-call-thumbnail.png"
                     alt="Agent"
                   />
+                  <chatbot_span className="online-indicator"></chatbot_span>
                 </div>
-                <chatbot_span className="online-indicator"></chatbot_span>
+                
               </div>
-            </div>
-            <chatbot_span id="chat_bot_main__mx_head">{assitant_name && assitant_name }</chatbot_span>
+              <div>
+                <chatbot_span id="chat_bot_main__mx_head">{assitant_name && assitant_name }</chatbot_span>
             {!typing && (
               <>
                 {" "}
@@ -149,6 +161,9 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
                 <div class="typing_loader"></div>
               </div>
             )}
+              </div>
+            </div>
+            
             <chatbot_span
               id="chat_bot_main__mx_fullscreen_loader"
               className="chat_bot_main__mx_fullscreen_loader"
@@ -206,9 +221,10 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
       </div>
       <a
         id="prime"
+        style={customUI}
         className={`fab ${isChatVisible ? "chat_bot_main__mx__is-visible  animate-view-spin" : ""}`}
         onClick={toggleFab}
-      >
+          >
               <div className="chatbot_icon_mx_inner">
                   {
                       isChatVisible && (<div className="chatbot_icon_mx"><AiOutlineCloseCircle /></div>)
@@ -217,6 +233,7 @@ const ChatWidget = ({ socket, client_id, assitant_name }) => {
                        !isChatVisible && (<div className="chatbot_icon_mx"><TbMessageDots /></div>)
                   }
              </div>
+                  
       </a>
     </div>
   );

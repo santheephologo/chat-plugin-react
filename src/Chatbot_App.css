@@ -2,6 +2,39 @@
 * {
     scroll-behavior: smooth;
 }
+.chat_bot_main__mx_header2{
+  padding: 5px 10px ;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.chat_bot_main__mx_header_img_container2 .chat_bot_main__mx_header_img2{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+.chat_bot_main__mx_header_img_container2{
+  top: -10px;
+  
+}
+.chat_bot_main__mx_option_inner2{
+  display: flex;
+  gap: 15px;
+  color: white;
+}
+.chat_bot_main__mx_name2{
+  padding-top: 5px;
+}
+.online-indicator2 {
+    position: absolute;
+    bottom: 0;
+    top: 45px;
+    left: 45px; 
+    width: 10px; 
+    height: 10px; 
+    background-color: #68d391; 
+    border: 1px solid white;
+    border-radius: 50%; 
+}
 @keyframes chat_bot_main__mx_spin {
   0% {
     opacity: 1;
@@ -22,7 +55,9 @@
         transform: translateY(0);
     }
 }
-
+.custom{
+  background-color: #0fa6cc;
+}
 .animate-view-spin {
   animation: chat_bot_main__mx_spin 0.4s ease forwards;
 }
@@ -33,7 +68,13 @@
   align-items: center;    /* Centers vertically */
   height: 100%;           /* Ensure it takes full height of the container */
 }
-
+.chat_bot_main__mx_option_inner{
+  display: flex;
+  margin: 0 10px;
+  justify-content: left;
+  gap: 10px; 
+  
+}
 .chatbot_icon_mx {
   display: flex;
   justify-content: center; /* Centers horizontally */
@@ -68,7 +109,7 @@
   position: relative;
   z-index: 998;
   overflow: hidden;
-  background: #42a5f5;
+  
 }
 
 .chat_bot_main__mx__send_btn {
@@ -90,9 +131,7 @@
   -webkit-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out;
 }
-.chatbot_custom_ui_change{
-  background: #68d391;
-}
+
 .fab:not(:last-child) {
   width: 0;
   height: 0;
@@ -179,25 +218,23 @@
     font-weight: 500;
     color: #f3f3f3;
     height: 55px;
-    background-color: #42a5f5;
+    
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     padding-top: 8px;
 }
-.chat_bot_main__mx_header_img{
-  position: relative;
-  
-}
 
-.chat_bot_main__mx_header_img_inner{
-  display: flex;                  /* flex */
-  align-items: center;            /* items-center */
-  justify-content: center;        /* justify-center */
-  height: 2.5rem;                 /* h-10 (10 * 0.25rem) */
-  width: 2.5rem;                  /* w-10 (10 * 0.25rem) */
-  border-radius: 50%;             /* rounded-full */
-  background-color: #c3dafe;      /* bg-indigo-200 */
-  flex-shrink: 0;  
+.chat_bot_main__mx_header_img_container{
+  top: -35px;
+  position: relative;
+  display: inline-block;
+} 
+.chat_bot_main__mx_header_img {
+    border-radius: 50%;
+    width: 55px;
+    float: left;
+    
+    border: 4px solid rgba(0, 0, 0, 0.21);
 }
 
 
@@ -238,14 +275,6 @@
       font-weight: 400
 }
 
-.chat_bot_main__mx_option img {
-    border-radius: 50%;
-    width: 55px;
-    float: left;
-    margin: -30px 20px 10px 20px;
-    border: 4px solid rgba(0, 0, 0, 0.21);
-}
-
 
 .chat_bot_main__mx_option .agent {
   font-size: 12px;
@@ -265,16 +294,10 @@
   float: left;
 }
 
-
-
-
  .chat_bot_main__mx_body_a{
     -webkit-animation: zoomIn .2s cubic-bezier(.42, 0, .58, 1);
   animation: zoomIn .2s cubic-bezier(.42, 0, .58, 1);
 }
-
-
-
 
 .chat_bot_main__mx_field {
   position: relative;
@@ -358,6 +381,7 @@
 }
 .chat_bot_main__mx_conversion {
  scroll-behavior: smooth;
+ padding-top: 20px;
 }
 .initial_prompt{
   margin-top: 10px;
@@ -367,7 +391,7 @@
 .chat_bot_main__mx_converse {
   position: relative;
     background: #fff;
-    margin: 6px 0 0px 0;
+    margin: 0 0 0px 0;
     height: 300px;
     min-height: 0;
     font-size: 12px;
@@ -431,16 +455,18 @@
 .chat_bot_main__mx .chat_bot_main__mx_converse .chat_bot_main__mx_msg_item.chat_bot_main__mx_msg_item_admin {
   margin-left: 60px;
   float: left;
-  background: rgba(0, 0, 0, 0.03);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+  background: rgba(195, 189, 189, 0.03);
   color: #666;
 }
 
 .chat_bot_main__mx .chat_bot_main__mx_converse .chat_bot_main__mx_msg_item.chat_bot_main__mx_msg_item_user {
   margin-right: 20px;
   float: right;
-  background: #42a5f5;
-  color: #eceff1;
+  background-color: #f1efef;
+  color: #6f7578;
   border-radius: 15px;
+  box-shadow: 0px 2px 1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .chat_bot_main__mx .chat_bot_main__mx_converse .chat_bot_main__mx_msg_item.chat_bot_main__mx_msg_item_admin:before {
@@ -527,11 +553,10 @@ strong.chat_bot_main__mx_time {
 .online-indicator {
     position: absolute;
     bottom: 0;
-    top: 1.4rem;
-    left: 3.9rem; 
-    bottom:1.5rem;
-    width: 0.6rem; 
-    height: 0.6rem; 
+    top: 50px;
+    left: 45px; 
+    width: 10px; 
+    height: 10px; 
     background-color: #68d391; 
     border: 1px solid white;
     border-radius: 50%; 
@@ -735,7 +760,7 @@ strong.chat_bot_main__mx_time {
        -moz-animation: Typing 2s linear infinite alternate;
             animation: typing 2s linear infinite alternate;
             
-    margin: 8px 105px; /* Not necessary- its only for layouting*/  
+    margin: 8px 2px; /* Not necessary- its only for layouting*/  
     position: relative;
    
 }
