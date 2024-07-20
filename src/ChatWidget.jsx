@@ -13,7 +13,9 @@ const ChatWidget = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [typing, setTyping] = useState(false);
   const [viewInitialPrompt, setViewInitialPrompt] = useState(true);
+  const [connectionError, setConnectionError] = useState(false);
   const chatboxRef = useRef(null);
+  
 
   useEffect(() => {
     if (typing && viewInitialPrompt) {
@@ -21,24 +23,23 @@ const ChatWidget = () => {
     }
   }, [typing, viewInitialPrompt]);
 
-  useEffect(() => {
+    useEffect(() => {
     socket.on("connect", () => {
-      console.log("Socket.IO connection established");
+      setConnectionError(false)
     });
-
+    
+    }, []);
+  
+    useEffect(() => {
     socket.on("disconnect", () => {
+      setConnectionError(false)
       console.log("Socket.IO connection closed");
     });
-
-    socket.on("connect_error", (error) => {
-      console.error("Socket.IO connection error:", error);
-    });
-  }, []);
-
+    }, []);
+  
   useEffect(() => {
     socket.on("response", (msg) => {
       setTyping(false);
-      console.log("received from server " + msg);
       addMessage("Bot", msg);
     });
 
@@ -47,16 +48,29 @@ const ChatWidget = () => {
     };
   }, []);
 
+  useEffect(() => {
+    socket.on("connect_error", (error) => {
+      setConnectionError(true);
+      setTyping(false);
+      console.error("Socket.IO connection error:", error);
+    });
+  },[])
   const addMessage = (sender, message) => {
-    console.log("response " + message);
+    
     setMessages((prevMessages) => [...prevMessages, { sender, message }]);
   };
 
   const sendMessage = (message) => {
-    setTyping(true);
-    addMessage("User", message);
-    socket.emit("message", { client_id: "66836f2ef640cff3cdaa0d50", message });
+    if (message.trim() !=="" && !connectionError) { 
+      setInput("");
+      setTyping(true);
+      addMessage("User", message);
+      socket.emit("message", { client_id: "66836f2ef640cff3cdaa0d50", message });
+    }
+
   };
+
+
 
   const handleSend = (e) => {
     if (e.which === 13 && !e.shiftKey) {
@@ -93,7 +107,12 @@ const ChatWidget = () => {
                     src="https://w7.pngwing.com/pngs/198/625/png-transparent-call-centre-customer-service-computer-icons-call-centre-miscellaneous-face-telephone-call-thumbnail.png"
                     alt="Agent"
                   />
-                  <chatbot_span className="online-indicator"></chatbot_span>
+                  {
+                    !connectionError && (<chatbot_span className="online-indicator"></chatbot_span>)  
+                  }
+                  {
+                    connectionError && (<chatbot_span className="offline-indicator"></chatbot_span>)
+                  }
                 </div>
                 
               </div>
@@ -134,11 +153,12 @@ const ChatWidget = () => {
           ref={chatboxRef}
           className={`chat_bot_main__mx_conversion chat_bot_main__mx_converse ${isFullscreen ? "chat_bot_main__mx_fullscreen" : ""}`}
         >
-          {viewInitialPrompt && (
+          {viewInitialPrompt && !connectionError && (
             <>
               <div className="initial_prompt">How may I assist you?</div>
             </>
           )}
+          
           <chatbot_span
               
               className={`chat_bot_main__mx_msg_item ${"chat_bot_main__mx_msg_item_admin" }`}
@@ -176,6 +196,25 @@ const ChatWidget = () => {
               {msg.message}
             </chatbot_span>
           ))}
+          {
+            connectionError && (
+              <chatbot_span
+              
+              className={`chat_bot_main__mx_msg_item ${"chat_bot_main__mx_msg_item_admin" }`}
+            >
+              
+                <div className="chat_bot_main__mx_avatar">
+                  <img
+                    src="https://w7.pngwing.com/pngs/198/625/png-transparent-call-centre-customer-service-computer-icons-call-centre-miscellaneous-face-telephone-call-thumbnail.png"
+                    alt="Agent"
+                  />
+                </div>
+             
+             <div className="connection_error">Connection error. Please check your connection</div>
+          </chatbot_span>
+              
+            )
+          }
         </div>
 
         <div className="fab_field">

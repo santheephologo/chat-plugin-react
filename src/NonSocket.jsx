@@ -4,11 +4,11 @@ import "./Chatbot_App.css";
 import { TbMessageDots } from "react-icons/tb";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { LuSendHorizonal } from "react-icons/lu";
-
+import axios from "axios";
 
 const App = ({configScript}) => {
   const [config, setConfig] = useState(null);
-  const [socket, setSocket] = useState(null);
+  const [backendUrl, setBackendUrl] = useState(null);
   const [customUI, setCustomUI] = useState({
     backgroundColor: 'lightblue'
   });
@@ -17,6 +17,7 @@ const App = ({configScript}) => {
     // console.log("config : "+configScript)
     if (configScript) {
       setConfig(configScript);
+      setBackendUrl(configScript.BACKEND_ENDPOINT)
       setCustomUI((prevConfig) => ({
       ...prevConfig,
       backgroundColor: configScript.CUSTOM_COLOR
@@ -26,43 +27,21 @@ const App = ({configScript}) => {
     }
   }, []);
 
-  
-  useEffect(() => {
-    if (config) {
-      const socketInstance = io(config.SOCKET_URL);
-      setSocket(socketInstance);
-
-      socketInstance.on('connect', () => {
-        console.log("Socket.IO connection established");
-      });
-
-      socketInstance.on('disconnect', () => {
-        console.log("Socket.IO connection closed");
-      });
-
-      socketInstance.on('connect_error', (error) => {
-        console.error("Socket.IO connection error:", error);
-      });
-
-      
-    }
-  }, [config]);
-
   if (!config) {
     console.log("Loading configuration...");
     return <div>Loading configuration...</div>;
   }
 
-  if (config && socket) {
+  if (config && backendUrl) {
     
-    return <ChatWidget socket={socket} client_id={config.CLIENT_ID} assitant_name={ config.ASSISTANT_NAME} customUI={customUI} />;
+    return <ChatWidget backendUrl={backendUrl} client_id={config.CLIENT_ID} assitant_name={ config.ASSISTANT_NAME} customUI={customUI} />;
   }
 
   return null;
 };
 
 
-const ChatWidget = ({ socket, client_id, assitant_name, customUI }) => {
+const ChatWidget = ({backendUrl , client_id, assitant_name, customUI }) => {
   
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -79,52 +58,37 @@ const ChatWidget = ({ socket, client_id, assitant_name, customUI }) => {
     }
   }, [typing, viewInitialPrompt]);
  
-
-    useEffect(() => {
-    socket.on("connect", () => {
-      setConnectionError(false)
+  const sendMessage = async (message) => {
+    try {
+      if (message.trim() !== "" && !connectionError) {
+        setInput("");
+        setTyping(true);
+        addMessage("User", message);
+        const response = await axios.post(backendUrl, { client_id: client_id, message: message }, {
+        headers: {
+          "Content-Type": "application/json",
+        },
     });
-    
-    }, []);
-  
-    useEffect(() => {
-    socket.on("disconnect", () => {
-      setConnectionError(false)
-      console.log("Socket.IO connection closed");
-    });
-    }, []);
-  
-  useEffect(() => {
-    socket.on("response", (msg) => {
-      setTyping(false);
-      addMessage("Bot", msg);
-    });
-
-    return () => {
-      socket.off("response");
-    };
-  }, []);
-
-  useEffect(() => {
-    socket.on("connect_error", (error) => {
+        if (response) {
+          
+          setConnectionError(false);
+          setTyping(false);
+          addMessage("Bot", response.data.message);
+        } else {
+          addMessage("Bot", "Something went wrong. Please try again");
+        }
+      }
+    } catch (error) {
       setConnectionError(true);
       setTyping(false);
-      console.error("Socket.IO connection error:", error);
-    });
-  },[])
+    console.error(error.message);
+  }
+};
+
+
   const addMessage = (sender, message) => {
     
     setMessages((prevMessages) => [...prevMessages, { sender, message }]);
-  };
-
-  const sendMessage = (message) => {
-    if (message.trim() !=="" && !connectionError) { 
-      setInput("");
-      setTyping(true);
-      addMessage("User", message);
-      socket.emit("message", { client_id: client_id, message });
-    }
-
   };
 
   const handleSend = (e) => {

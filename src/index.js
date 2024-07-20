@@ -1,7 +1,7 @@
 // import React from 'react';
 // import ReactDOM from 'react-dom';
 // import App from './App';
-// import "./Chatbot.module.css";
+// import "./Chatbot_App.css";
 
 // const ReactChatbotWidget = {
 //   init: (domElement, configScript) => {

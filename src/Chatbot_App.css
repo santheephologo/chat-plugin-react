@@ -298,7 +298,12 @@
     -webkit-animation: zoomIn .2s cubic-bezier(.42, 0, .58, 1);
   animation: zoomIn .2s cubic-bezier(.42, 0, .58, 1);
 }
-
+.connection_error{
+  margin-top: 5px;
+  color: #ff8989;  
+  padding: 5px 0;
+  border-radius: 20px;
+}
 .chat_bot_main__mx_field {
   position: relative;
   margin: 5px 0 5px 0;
@@ -561,7 +566,18 @@ strong.chat_bot_main__mx_time {
     border: 1px solid white;
     border-radius: 50%; 
 }
-
+.offline-indicator {
+    position: absolute;
+    bottom: 0;
+    top: 50px;
+    left: 45px; 
+    width: 10px; 
+    height: 10px; 
+    background-color: #a7a9a8; 
+    border: 1px solid white;
+    border-radius: 50%; 
+    -webkit-font-smoothing: antialiased;
+}
 .is-float {
   box-shadow: 0 0 6px rgba(0, 0, 0, .16), 0 6px 12px rgba(0, 0, 0, .32);
 }
@@ -814,4 +830,3 @@ strong.chat_bot_main__mx_time {
                     24px 0px 0px 0px rgba(255,255,255,1);
       }
 }
-
